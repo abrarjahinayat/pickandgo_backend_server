@@ -95,10 +95,10 @@ const ordereControllers = async (req, res) => {
       total_amount: totalprice,
       currency: "BDT",
       tran_id: tran_id, // unique tran_id
-      success_url: `http://localhost:4000/api/v1/order/success/${tran_id}`,
-      fail_url: `http://localhost:4000/api/v1/order/fail/${tran_id}`,
-      cancel_url: "http://localhost:3030/cancel",
-      ipn_url: "http://localhost:3030/ipn",
+      success_url: `${process.env.SERVER_URL}/api/v1/order/success/${tran_id}`,
+      fail_url: `${process.env.SERVER_URL}/api/v1/order/fail/${tran_id}`,
+      cancel_url: `${process.env.SERVER_URL}/cancel`,
+      ipn_url: `${process.env.SERVER_URL}/ipn`,
       shipping_method: "Courier",
       product_name: "Computer.",
       product_category: "Electronic",
@@ -201,7 +201,7 @@ const odersuccessControllers = async (req, res) => {
     // now that payment is confirmed, you can safely clear cart:
     await cartModel.deleteMany({ user: order.user });
 
-   return res.redirect("http://localhost:3000/order-success");
+   return res.redirect(`${process.env.CLIENT_URL}/order-success`);
   } catch (error) {
     console.error("Order Success Error:", error);
     return res.status(500).json({
