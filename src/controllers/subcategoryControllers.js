@@ -105,4 +105,31 @@ const subCategoryControllers = async (req, res) => {
   }
 }
 
-module.exports = { addsubCategoryControllers, deletesubCategoryControllers, subCategoryControllers };
+const getallsubCategoryControllers = async (req, res) => {
+  try {
+    let allsubcategory = await subcategoryModel.find({}).populate({
+      path: "category",
+      select: "name slug",
+    });
+    return res.status(200).json({
+      success: true,
+      message: "All SubCategory fetched successfully",
+      data: allsubcategory,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message || error,
+    });
+  }
+};
+
+// Don't forget to export it
+module.exports = { 
+  addsubCategoryControllers, 
+  deletesubCategoryControllers, 
+  subCategoryControllers,
+  getallsubCategoryControllers  // ADD THIS
+};
+

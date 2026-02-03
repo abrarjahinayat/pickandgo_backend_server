@@ -11,5 +11,7 @@ router.post("/addsubcategory", TokenCheckMiddleware , adminCheckMiddleware ,adds
 router.delete("/deletesubcategory/:id", TokenCheckMiddleware, adminCheckMiddleware, deletesubCategoryControllers );
 
 router.patch("/updatesubcategory/:id", TokenCheckMiddleware, adminCheckMiddleware, subCategoryControllers );
+// Add this line to your subcategory route file
+router.get("/getallsubcategory", getallsubCategoryControllers);
 
 module.exports = router;

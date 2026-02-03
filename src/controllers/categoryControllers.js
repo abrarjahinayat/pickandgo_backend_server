@@ -128,7 +128,7 @@ const updatecategoryControllers = async (req, res) => {
 // Get All Category Controller
 const getallcategoryControllers = async (req, res) => {
   try {
-    let allcategory = await categoryModel.find({isActive : true}).populate({
+    let allcategory = await categoryModel.find({}).populate({
       path: "subcategory",
       select : "name slug",
     });
@@ -145,7 +145,6 @@ const getallcategoryControllers = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   addcategoryControllers,

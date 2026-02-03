@@ -22,8 +22,30 @@ const addproductControllers = async (req, res) => {
       isNew,
       isFeatured,
     } = req.body;
+    
+    console.log("=== Received Data ===");
+    console.log("title:", title);
+    console.log("productType:", productType);
+    console.log("description:", description);
+    console.log("category:", category);
+    console.log("stock:", stock);
+    console.log("variantType:", variantType);
+    console.log("files:", req.files);
+    
     let image = req.files;
 
+    if (
+      !title ||
+      !productType ||
+      !description ||
+      !category ||
+      !image || image.length === 0 ||  // FIX: Check if files array is empty
+      !stock ||
+      !variantType
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    
     const imagePaths = req.files.map((item) => {
       return `${process.env.SERVER_URL}/${item.filename}`;
     });
@@ -34,42 +56,29 @@ const addproductControllers = async (req, res) => {
       lower: true,
       trim: true,
     });
-    if (
-      !title ||
-      !productType ||
-      !description ||
-      !category ||
-      !image ||
-      !stock ||
-      !variantType
-    ) {
-      return res.status(400).json({ message: "All fields are required" });
-    } else {
-      let addproduct = await new productModel({
-        title,
-        price,
-        description,
-        category,
-        subcategory,
-        image: imagePaths,
-        slug,
-        stock,
-        productType,
-        reviews,
-        rating,
-        variantType,
-        variants,
-        originalPrice,
-        isNew,
-        isFeatured,
-      });
-      await addproduct.save();
-      return res.status(201).json({
-        success: true,
-        message: "Product added successfully",
-        data: addproduct,
-      });
-    }
+    
+    let addproduct = await new productModel({
+      title,
+      price,
+      description,
+      category,
+      subcategory,
+      image: imagePaths,
+      slug,
+      stock,
+      productType,
+      variantType,
+      originalPrice,
+      isNew: isNew === 'true' || isNew === true,  // FIX: Convert string to boolean
+      isFeatured: isFeatured === 'true' || isFeatured === true,  // FIX: Convert string to boolean
+    });
+    
+    await addproduct.save();
+    return res.status(201).json({
+      success: true,
+      message: "Product added successfully",
+      data: addproduct,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -78,7 +87,6 @@ const addproductControllers = async (req, res) => {
     });
   }
 };
-
 const getallproductControllers = async (req, res) => {
   try {
     let products = await productModel
