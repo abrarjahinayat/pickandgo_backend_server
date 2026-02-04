@@ -331,6 +331,46 @@ const getSingleuserorderControllers = async (req, res) => {
   }
 };
 
+// Update Order Status
+const updateOrderStatusController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { orderstatus } = req.body;
+
+    if (!["pending", "confirmed", "delivered"].includes(orderstatus)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid order status",
+      });
+    }
+
+    const order = await orderModel.findByIdAndUpdate(
+      id,
+      { orderstatus },
+      { new: true }
+    );
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Order status updated successfully",
+      data: order,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   ordereControllers,
   getallordersControllers,
@@ -338,5 +378,6 @@ module.exports = {
   orderfailControllers,
   ordercancelControllers,
   getSingleorderControllers,
-  getSingleuserorderControllers
+  getSingleuserorderControllers,
+  updateOrderStatusController
 };

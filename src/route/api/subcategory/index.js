@@ -1,5 +1,5 @@
 const express = require("express");
-const { subCategoryControllers, addsubCategoryControllers, deletesubCategoryControllers } = require("../../../controllers/subcategoryControllers");
+const { subCategoryControllers, addsubCategoryControllers, deletesubCategoryControllers ,getallsubCategoryControllers } = require("../../../controllers/subcategoryControllers");
 const { TokenCheckMiddleware, adminCheckMiddleware } = require("../../../utils/authMiddleware");
 
 

@@ -241,7 +241,7 @@ const featuredproductsControllers = async (req, res) => {
     let products = await productModel
       .find({ isFeatured: true })
       .populate({ path: "variants", select: "size color stock _id" })
-      .limit(8);
+      .limit(8).sort({ createdAt: -1 });
     return res.status(200).json({
       success: true,
       message: "All Product fetched successfully",
